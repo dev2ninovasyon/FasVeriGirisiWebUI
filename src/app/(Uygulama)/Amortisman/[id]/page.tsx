@@ -22,6 +22,7 @@ import { enqueueSnackbar } from "notistack";
 import { useSelector } from "@/store/hooks";
 import { AppState } from "@/store/store";
 import { TamamlaPopUp } from "@/app/(Uygulama)/components/PopUps/TamamlaPopUp";
+import { url } from "@/api/apiBase";
 
 interface Veri {
   id: number;
@@ -104,7 +105,7 @@ const Page: React.FC = () => {
   const fetchData = async () => {
     try {
       const baglantiBilgisi = await getBaglantiBilgileriByLink(
-        `http://localhost:3001${pathname}`
+        `http://fasverigirisitestv1${pathname}`
       );
       if (baglantiBilgisi != undefined) {
         // Tarihleri "DD.MM.YYYY HH:mm" formatında ayarlama

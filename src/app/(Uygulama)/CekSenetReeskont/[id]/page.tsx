@@ -197,7 +197,7 @@ const Page: React.FC = () => {
   const fetchData = async () => {
     try {
       const baglantiBilgisi = await getBaglantiBilgileriByLink(
-        `http://localhost:3001${pathname}`
+        `http://fasverigirisitestv1${pathname}`
       );
       if (baglantiBilgisi != undefined) {
         // Tarihleri "DD.MM.YYYY HH:mm" formatında ayarlama

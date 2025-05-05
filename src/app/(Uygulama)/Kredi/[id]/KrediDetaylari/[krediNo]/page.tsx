@@ -54,7 +54,7 @@ const Page: React.FC = () => {
   const fetchData = async () => {
     try {
       const baglantiBilgisi = await getBaglantiBilgileriByLink(
-        `http://localhost:3001${pathname.split("/KrediDetay")[0]}`
+        `http://fasverigirisitestv1${pathname.split("/KrediDetay")[0]}`
       );
       if (baglantiBilgisi != undefined) {
         // Tarihleri "DD.MM.YYYY HH:mm" formatında ayarlama
