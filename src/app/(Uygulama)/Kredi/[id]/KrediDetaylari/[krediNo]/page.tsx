@@ -127,7 +127,7 @@ const Page: React.FC = () => {
       description="this is Kredi Detayları"
     >
       <Breadcrumb
-        title={`${krediNo} Numaralı Kredi Detayları`}
+        title={`${krediNo} Numaralı Kredi Detayları Veri Giriş Ekranı`}
         subtitle={
           fetchedData
             ? `${fetchedData.denetlenenFirmaAdi} ⚬ ${fetchedData.yil}`

@@ -309,7 +309,7 @@ const Page: React.FC = () => {
       description="Çek / Senet Reeskont"
     >
       <Breadcrumb
-        title="Çek / Senet Reeskont"
+        title="Çek / Senet Reeskont Veri Giriş Ekranı"
         subtitle={
           fetchedData
             ? `${fetchedData.denetlenenFirmaAdi} ⚬ ${fetchedData.yil}`

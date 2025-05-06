@@ -149,7 +149,7 @@ const Page: React.FC = () => {
   return control ? (
     <PageContainer title="Kredi" description="this is Kredi">
       <Breadcrumb
-        title="Kredi"
+        title="Kredi Veri Giriş Ekranı"
         subtitle={
           fetchedData
             ? `${fetchedData.denetlenenFirmaAdi} ⚬ ${fetchedData.yil}`

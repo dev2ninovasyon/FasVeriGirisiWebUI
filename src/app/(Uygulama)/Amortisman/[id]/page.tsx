@@ -22,7 +22,6 @@ import { enqueueSnackbar } from "notistack";
 import { useSelector } from "@/store/hooks";
 import { AppState } from "@/store/store";
 import { TamamlaPopUp } from "@/app/(Uygulama)/components/PopUps/TamamlaPopUp";
-import { url } from "@/api/apiBase";
 
 interface Veri {
   id: number;
@@ -150,7 +149,7 @@ const Page: React.FC = () => {
   return control ? (
     <PageContainer title="Amortisman" description="this is Amortisman">
       <Breadcrumb
-        title="Amortisman"
+        title="Amortisman Veri Giriş Ekranı"
         subtitle={
           fetchedData
             ? `${fetchedData.denetlenenFirmaAdi} ⚬ ${fetchedData.yil}`
