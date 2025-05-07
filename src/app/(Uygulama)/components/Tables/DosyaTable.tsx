@@ -51,6 +51,7 @@ interface Veri {
 
 interface MyComponentProps {
   rows: DosyaType[];
+  tamamlaTiklandimi: boolean;
   fetchedData: Veri | null;
   fileType: string;
   dosyaYuklendiMi: boolean;
@@ -67,6 +68,7 @@ interface DosyaType {
 
 const DosyaTable: React.FC<MyComponentProps> = ({
   rows,
+  tamamlaTiklandimi,
   fetchedData,
   fileType,
   dosyaYuklendiMi,
@@ -633,7 +635,7 @@ const DosyaTable: React.FC<MyComponentProps> = ({
           variant="outlined"
           color="error"
           size="small"
-          disabled={fetchedData != null}
+          disabled={tamamlaTiklandimi}
           onClick={() => {
             handleIsConfirm();
           }}

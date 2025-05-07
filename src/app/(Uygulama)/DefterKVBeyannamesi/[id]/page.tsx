@@ -77,7 +77,7 @@ const Page: React.FC = () => {
 
   const pathname = usePathname();
 
-  const [control, setControl] = useState(false);
+  const [control, setControl] = useState(true);
 
   const [fetchedData, setFetchedData] = useState<Veri | null>(null);
 
@@ -279,218 +279,235 @@ const Page: React.FC = () => {
         }
       />
       <Grid container spacing={3}>
-        <Grid
-          item
-          xs={12}
-          lg={12}
-          sx={{
-            display: "flex",
-            flexDirection: smDown ? "column" : "row",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            gap: 1,
-          }}
-        >
-          <Box flex={1}></Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: smDown ? "column" : "row",
-              gap: 1,
-              width: smDown ? "100%" : "auto",
-            }}
-          >
-            <Button
-              type="button"
-              size="medium"
-              disabled={tamamlaTiklandimi}
-              variant="outlined"
-              color="success"
-              onClick={() => {
-                setIsTamamlaPopUpOpen(true);
+        {fetchedData != null && (
+          <>
+            <Grid
+              item
+              xs={12}
+              lg={12}
+              sx={{
+                display: "flex",
+                flexDirection: smDown ? "column" : "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                gap: 1,
               }}
             >
-              Tamamla
-            </Button>
-          </Box>
-        </Grid>
-        <Grid item xs={12} lg={5}>
-          <Box
-            sx={{
-              height: "550px",
-              border: `1px solid ${borderColor}`,
-              borderRadius: `${borderRadius}/5`,
-            }}
-          >
-            <Stack
-              direction={"row"}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Typography variant="h5" padding={"16px"}>
-                Dosya Yükle
-              </Typography>
-              <CustomSelect
-                labelId="defter"
-                id="defter"
-                size="small"
-                value={fileType}
-                onChange={handleChange}
+              <Box flex={1}></Box>
+              <Box
                 sx={{
-                  height: "32px",
-                  minWidth: "120px",
-                  marginRight: "16px",
+                  display: "flex",
+                  flexDirection: smDown ? "column" : "row",
+                  gap: 1,
+                  width: smDown ? "100%" : "auto",
                 }}
               >
-                <MenuItem value={"E-DefterKebir"}>E-Defter Kebir</MenuItem>
-                <MenuItem value={"E-DefterYevmiye"}>E-Defter Yevmiye</MenuItem>
-                <MenuItem value={"KurumlarBeyannamesi"}>
-                  K. V. Beyannamesi
-                </MenuItem>
-              </CustomSelect>
-            </Stack>
-            {fileType === "E-DefterKebir" && (
-              <Stack direction={"column"} padding={"16px"}>
-                <Typography variant="body2" marginY={"4px"}>
-                  UYARI!
-                </Typography>
-                <Typography variant="body2" marginY={"4px"}>
-                  1- Örnek Dosya Adı &quot;1716152123-202001-K-000000.xml&quot;
-                  Şeklinde Olan, Sadece &quot;K&quot; Harfini İçeren
-                  &quot;.xml&quot; Uzantılı E-Defter Kebir Dosyalarını
-                  Yükleyiniz.
-                </Typography>
-                <Typography variant="body2" marginY={"4px"}>
-                  2- Aynı İsimde Dosya Yüklenmesi Durumunda Son Yüklenen Dosya
-                  Geçerli Olacaktır.
-                </Typography>
-              </Stack>
-            )}
-
-            <Box
-              {...getRootProps()}
-              sx={{
-                border: `2px dashed ${borderColor}`,
-                borderRadius: `${borderRadius}/5`,
-                padding: "20px",
-                margin: "16px",
-                textAlign: "center",
-                pointerEvents: fetchedData != null ? "none" : "visible",
-                height: "285px",
-                mt: 3,
-              }}
-            >
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <Grid
-                  container
-                  style={{ height: "100%" }}
-                  alignItems="center"
-                  justifyContent="center"
+                <Button
+                  type="button"
+                  size="medium"
+                  disabled={tamamlaTiklandimi}
+                  variant="outlined"
+                  color="success"
+                  onClick={() => {
+                    setIsTamamlaPopUpOpen(true);
+                  }}
                 >
-                  <Grid item sm={12} lg={12} style={{ textAlign: "center" }}>
-                    <Typography>Dosyaları buraya bırakın...</Typography>
-                  </Grid>
-                </Grid>
-              ) : (
-                <Grid
-                  container
-                  style={{ height: "100%" }}
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Grid item sm={12} lg={12} style={{ textAlign: "center" }}>
-                    {uploading ? (
-                      <Stack
-                        spacing={2}
-                        padding={"16px"}
-                        flexWrap={"nowrap"}
-                        overflow={"auto"} // Taşmayı önler ve gerektiğinde scroll çıkarır
-                        maxHeight={"240px"} // Dikey sınır, gerekirse değiştirebilirsiniz
-                      >
-                        {progressInfos.map((info, index) => (
-                          <Box key={index}>
-                            <Typography>{info.fileName}</Typography>
-                            <LinearProgress
-                              variant="determinate"
-                              value={info.percentage}
-                            />
-                            <Typography>{info.percentage}%</Typography>
-                          </Box>
-                        ))}
-                      </Stack>
-                    ) : (
-                      <>
-                        <Typography variant="h6" mb={3}>
-                          Dosyayı buraya sürükleyin veya tıklayıp seçin.
-                        </Typography>
-                        <Typography variant="body2">
-                          Sadece{" "}
-                          {fileType === "E-DefterKebir" ||
-                          fileType === "E-DefterYevmiye"
-                            ? "XML "
-                            : "PDF "}
-                          dosyası yükleyebilirsiniz.
-                        </Typography>
-                      </>
-                    )}
-                  </Grid>
-                </Grid>
-              )}
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={12} lg={7}>
-          <Box
-            sx={{
-              height: smDown ? "610px" : "550px",
-              border: `1px solid ${borderColor}`,
-              borderRadius: `${borderRadius}/5`,
-            }}
-          >
-            <DosyaTable
-              rows={rows}
-              fetchedData={fetchedData}
-              fileType={fileType}
-              dosyaYuklendiMi={dosyaYuklendiMi}
-              setDosyaYuklendiMi={(deger) => setDosyaYuklendiMi(deger)}
-              setRows={setRows}
-            />
-          </Box>
-        </Grid>
-        {fileType === "E-DefterKebir" && (
-          <Grid item xs={12} lg={12}>
-            <Grid container spacing={2}>
-              {months.map((month, index) => {
-                const monthPart = (index + 1).toString().padStart(2, "0");
-                const count = rows.filter(
-                  (item: DosyaType) =>
-                    item.adi.split("-")[1]?.slice(-2) === monthPart
-                ).length;
-
-                return (
-                  <Grid item xs={6} md={3} lg={2} key={index}>
-                    <Paper
-                      elevation={2}
-                      sx={{
-                        p: 1,
-                        borderRadius: 1,
-                        backgroundColor: "warning.light",
-                        height: "100%",
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        sx={{ color: "warning.dark" }}
-                      >
-                        {month} Ayı Dosya Sayısı: {count}
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                );
-              })}
+                  Tamamla
+                </Button>
+              </Box>
             </Grid>
-          </Grid>
+            <Grid item xs={12} lg={5}>
+              <Box
+                sx={{
+                  height: "550px",
+                  border: `1px solid ${borderColor}`,
+                  borderRadius: `${borderRadius}/5`,
+                }}
+              >
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                >
+                  <Typography variant="h5" padding={"16px"}>
+                    Dosya Yükle
+                  </Typography>
+                  <CustomSelect
+                    labelId="defter"
+                    id="defter"
+                    size="small"
+                    value={fileType}
+                    onChange={handleChange}
+                    sx={{
+                      height: "32px",
+                      minWidth: "120px",
+                      marginRight: "16px",
+                    }}
+                  >
+                    <MenuItem value={"E-DefterKebir"}>E-Defter Kebir</MenuItem>
+                    <MenuItem value={"E-DefterYevmiye"}>
+                      E-Defter Yevmiye
+                    </MenuItem>
+                    <MenuItem value={"KurumlarBeyannamesi"}>
+                      K. V. Beyannamesi
+                    </MenuItem>
+                  </CustomSelect>
+                </Stack>
+                {fileType === "E-DefterKebir" && (
+                  <Stack direction={"column"} padding={"16px"}>
+                    <Typography variant="body2" marginY={"4px"}>
+                      UYARI!
+                    </Typography>
+                    <Typography variant="body2" marginY={"4px"}>
+                      1- Örnek Dosya Adı
+                      &quot;1716152123-202001-K-000000.xml&quot; Şeklinde Olan,
+                      Sadece &quot;K&quot; Harfini İçeren &quot;.xml&quot;
+                      Uzantılı E-Defter Kebir Dosyalarını Yükleyiniz.
+                    </Typography>
+                    <Typography variant="body2" marginY={"4px"}>
+                      2- Aynı İsimde Dosya Yüklenmesi Durumunda Son Yüklenen
+                      Dosya Geçerli Olacaktır.
+                    </Typography>
+                  </Stack>
+                )}
+
+                <Box
+                  {...getRootProps()}
+                  sx={{
+                    border: `2px dashed ${borderColor}`,
+                    borderRadius: `${borderRadius}/5`,
+                    padding: "20px",
+                    margin: "16px",
+                    textAlign: "center",
+                    pointerEvents: tamamlaTiklandimi ? "none" : "visible",
+                    height: "285px",
+                    mt: 3,
+                  }}
+                >
+                  <input {...getInputProps()} />
+                  {isDragActive ? (
+                    <Grid
+                      container
+                      style={{ height: "100%" }}
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Grid
+                        item
+                        sm={12}
+                        lg={12}
+                        style={{ textAlign: "center" }}
+                      >
+                        <Typography>Dosyaları buraya bırakın...</Typography>
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Grid
+                      container
+                      style={{ height: "100%" }}
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Grid
+                        item
+                        sm={12}
+                        lg={12}
+                        style={{ textAlign: "center" }}
+                      >
+                        {uploading ? (
+                          <Stack
+                            spacing={2}
+                            padding={"16px"}
+                            flexWrap={"nowrap"}
+                            overflow={"auto"} // Taşmayı önler ve gerektiğinde scroll çıkarır
+                            maxHeight={"240px"} // Dikey sınır, gerekirse değiştirebilirsiniz
+                          >
+                            {progressInfos.map((info, index) => (
+                              <Box key={index}>
+                                <Typography>{info.fileName}</Typography>
+                                <LinearProgress
+                                  variant="determinate"
+                                  value={info.percentage}
+                                />
+                                <Typography>{info.percentage}%</Typography>
+                              </Box>
+                            ))}
+                          </Stack>
+                        ) : (
+                          <>
+                            <Typography variant="h6" mb={3}>
+                              Dosyayı buraya sürükleyin veya tıklayıp seçin.
+                            </Typography>
+                            <Typography variant="body2">
+                              Sadece{" "}
+                              {fileType === "E-DefterKebir" ||
+                              fileType === "E-DefterYevmiye"
+                                ? "XML "
+                                : "PDF "}
+                              dosyası yükleyebilirsiniz.
+                            </Typography>
+                          </>
+                        )}
+                      </Grid>
+                    </Grid>
+                  )}
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={7}>
+              <Box
+                sx={{
+                  height: smDown ? "610px" : "550px",
+                  border: `1px solid ${borderColor}`,
+                  borderRadius: `${borderRadius}/5`,
+                }}
+              >
+                <DosyaTable
+                  rows={rows}
+                  tamamlaTiklandimi={tamamlaTiklandimi}
+                  fetchedData={fetchedData}
+                  fileType={fileType}
+                  dosyaYuklendiMi={dosyaYuklendiMi}
+                  setDosyaYuklendiMi={(deger) => setDosyaYuklendiMi(deger)}
+                  setRows={setRows}
+                />
+              </Box>
+            </Grid>
+            {fileType === "E-DefterKebir" && (
+              <Grid item xs={12} lg={12}>
+                <Grid container spacing={2}>
+                  {months.map((month, index) => {
+                    const monthPart = (index + 1).toString().padStart(2, "0");
+                    const count = rows.filter(
+                      (item: DosyaType) =>
+                        item.adi.split("-")[1]?.slice(-2) === monthPart
+                    ).length;
+
+                    return (
+                      <Grid item xs={6} md={3} lg={2} key={index}>
+                        <Paper
+                          elevation={2}
+                          sx={{
+                            p: 1,
+                            borderRadius: 1,
+                            backgroundColor: "warning.light",
+                            height: "100%",
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            sx={{ color: "warning.dark" }}
+                          >
+                            {month} Ayı Dosya Sayısı: {count}
+                          </Typography>
+                        </Paper>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Grid>
+            )}
+          </>
         )}
         <TamamlaPopUp
           isTamamlaPopUp={isTamamlaPopUpOpen}
