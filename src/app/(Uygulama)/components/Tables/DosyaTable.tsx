@@ -30,7 +30,7 @@ import {
   getDefterYuklemeLoglari,
   getDosyaBilgileri,
 } from "@/api/Veri/DosyaBilgileri";
-import { ConfirmPopUp } from "@/app/(Uygulama)/components/Popups/ConfirmPopUp";
+import { ConfirmPopUp } from "@/app/(Uygulama)/components/PopUps/ConfirmPopUp";
 import WarnAlertCart from "@/app/(Uygulama)/components/Alerts/WarnAlertCart";
 import { IconDotsVertical, IconEye, IconX } from "@tabler/icons-react";
 import { url } from "@/api/apiBase";
