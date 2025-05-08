@@ -379,6 +379,7 @@ const Page: React.FC = () => {
                     padding: "20px",
                     margin: "16px",
                     textAlign: "center",
+                    cursor: tamamlaTiklandimi ? "none" : "pointer",
                     pointerEvents: tamamlaTiklandimi ? "none" : "visible",
                     height: "285px",
                     mt: 3,
