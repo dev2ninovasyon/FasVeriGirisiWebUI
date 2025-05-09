@@ -34,9 +34,9 @@ import {
   getKidemTazminatiBobiEkBilgi,
 } from "@/api/Veri/KidemTazminatiBobi";
 import { IconX } from "@tabler/icons-react";
-import CustomFormLabel from "../../components/Forms/ThemeElements/CustomFormLabel";
-import CustomTextField from "../../components/Forms/ThemeElements/CustomTextField";
-import CustomSelect from "../../components/Forms/ThemeElements/CustomSelect";
+import CustomFormLabel from "@/app/(Uygulama)/components/Forms/ThemeElements/CustomFormLabel";
+import CustomTextField from "@/app/(Uygulama)/components/Forms/ThemeElements/CustomTextField";
+import CustomSelect from "@/app/(Uygulama)/components/Forms/ThemeElements/CustomSelect";
 
 interface Veri {
   id: number;
