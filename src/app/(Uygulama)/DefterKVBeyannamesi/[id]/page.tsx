@@ -262,11 +262,11 @@ const Page: React.FC = () => {
 
   return control ? (
     <PageContainer
-      title="Defter / K.V. Beyannamesi"
-      description="this is Defter / K.V. Beyannamesi"
+      title="Defter / K. V. Beyannamesi"
+      description="this is Defter / K. V. Beyannamesi"
     >
       <Breadcrumb
-        title="Defter / K.V. Beyannamesi Veri Yükleme Ekranı"
+        title="Defter / K. V. Beyannamesi Veri Yükleme Ekranı"
         subtitle={
           fetchedData
             ? `${fetchedData.denetlenenFirmaAdi} ⚬ ${fetchedData.yil}`
