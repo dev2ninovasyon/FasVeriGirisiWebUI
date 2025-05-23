@@ -32,6 +32,8 @@ import { TamamlaPopUp } from "@/app/(Uygulama)/components/PopUps/TamamlaPopUp";
 import {
   createKidemTazminatiTfrsEkBilgi,
   getKidemTazminatiTfrsEkBilgi,
+  getEnflasyonOrani,
+  getFaizOrani,
 } from "@/api/Veri/KidemTazminatiTfrs";
 import { IconX } from "@tabler/icons-react";
 import CustomFormLabel from "@/app/(Uygulama)/components/Forms/ThemeElements/CustomFormLabel";
@@ -72,6 +74,8 @@ const Page: React.FC = () => {
   const [hesaplananKarsilik, setHesaplananKarsilik] = useState<number>(0);
   const [birikmisFon, setBirikmisFon] = useState<number>(0);
   const [izinKarsiligi, setIzinKarsiligi] = useState<number>(0);
+  const [enflasyonOrani, setEnflasyonOrani] = useState<number>(0);
+  const [faizOrani, setFaizOrani] = useState<number>(0);
   const [vergiOrani, setVergiOrani] = useState<number>(0);
   const [ayrilan2019, setAyrilan2019] = useState<number>(0);
   const [personel2019, setPersonel2019] = useState<number>(0);
@@ -184,6 +188,8 @@ const Page: React.FC = () => {
       birikmisFon: birikmisFon,
       hesaplansinMi: hesaplansinMi,
       izinKarsiligi: izinKarsiligi,
+      enflasyonOrani: enflasyonOrani,
+      faizOrani: faizOrani,
       vergiOrani: vergiOrani,
       ayrilan2019: ayrilan2019,
       personel2019: personel2019,
@@ -302,6 +308,8 @@ const Page: React.FC = () => {
         setBirikmisFon(kidemEkBilgiVerileri.birikmisFon);
         setHesaplansinMi(kidemEkBilgiVerileri.hesaplansinMi);
         setIzinKarsiligi(kidemEkBilgiVerileri.izinKarsiligi);
+        setEnflasyonOrani(kidemEkBilgiVerileri.enflasyonOrani);
+        setFaizOrani(kidemEkBilgiVerileri.faizOrani);
         setVergiOrani(kidemEkBilgiVerileri.vergiOrani);
         setAyrilan2019(kidemEkBilgiVerileri.ayrilan2019);
         setPersonel2019(kidemEkBilgiVerileri.personel2019);
@@ -361,6 +369,36 @@ const Page: React.FC = () => {
         setKullanilmamisIzinKarsiligi770(
           kidemEkBilgiVerileri.kullanilmamisIzinKarsiligi770
         );
+      } else {
+        fetchEnflasyonOrani();
+        fetchFaizOrani();
+      }
+    } catch (error) {
+      console.error("Bir hata oluştu:", error);
+    }
+  };
+
+  const fetchEnflasyonOrani = async () => {
+    try {
+      const enflasyonOraniVerisi = await getEnflasyonOrani(
+        "",
+        fetchedData?.yil || 0
+      );
+
+      if (enflasyonOraniVerisi) {
+        setEnflasyonOrani(enflasyonOraniVerisi);
+      }
+    } catch (error) {
+      console.error("Bir hata oluştu:", error);
+    }
+  };
+
+  const fetchFaizOrani = async () => {
+    try {
+      const faizOraniVerisi = await getFaizOrani("", fetchedData?.yil || 0);
+
+      if (faizOraniVerisi) {
+        setFaizOrani(faizOraniVerisi);
       }
     } catch (error) {
       console.error("Bir hata oluştu:", error);
@@ -632,6 +670,68 @@ const Page: React.FC = () => {
                     onChange={(e: any) =>
                       setIzinKarsiligi(parseInt(e.target.value))
                     }
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "space-between",
+                  mt: 1,
+                }}
+              >
+                <Grid item xs={12} lg={6}>
+                  <CustomFormLabel
+                    htmlFor="enflasyonOrani"
+                    sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
+                  >
+                    <Typography variant="h6" p={1}>
+                      Enflasyon Oranı
+                    </Typography>
+                  </CustomFormLabel>
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <CustomTextField
+                    id="enflasyonOrani"
+                    type="number"
+                    fullWidth
+                    value={enflasyonOrani}
+                    onChange={(e: any) => setEnflasyonOrani(e.target.value)}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  alignContent: "center",
+                  justifyContent: "space-between",
+                  mt: 1,
+                }}
+              >
+                <Grid item xs={12} lg={6}>
+                  <CustomFormLabel
+                    htmlFor="faizOrani"
+                    sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
+                  >
+                    <Typography variant="h6" p={1}>
+                      Faiz Oranı
+                    </Typography>
+                  </CustomFormLabel>
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <CustomTextField
+                    id="faizOrani"
+                    type="number"
+                    fullWidth
+                    value={faizOrani}
+                    onChange={(e: any) => setFaizOrani(e.target.value)}
                   />
                 </Grid>
               </Grid>

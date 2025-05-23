@@ -136,3 +136,44 @@ export const createKidemTazminatiTfrsEkBilgi = async (
     console.error("Bir hata oluştu:", error);
   }
 };
+
+export const getEnflasyonOrani = async (token: string, yil: number) => {
+  try {
+    const response = await fetch(
+      `${url}/Hesaplamalar/EnflasyonOrani?yil=${yil}`,
+      {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.error("Enflasyon Oranı getirilemedi");
+    }
+  } catch (error) {
+    console.error("Bir hata oluştu:", error);
+  }
+};
+
+export const getFaizOrani = async (token: string, yil: number) => {
+  try {
+    const response = await fetch(`${url}/Hesaplamalar/FaizOrani?yil=${yil}`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      return response.json();
+    } else {
+      console.error("Faiz Oranı getirilemedi");
+    }
+  } catch (error) {
+    console.error("Bir hata oluştu:", error);
+  }
+};
