@@ -31,6 +31,7 @@ numbro.setLanguage("tr-TR");
 interface Veri {
   id: number;
   alinanKrediNumarasi: number;
+  tur: string;
   detayHesapKodu: string;
   hesapAdi: string;
   alinanKrediTutar: number;
@@ -72,8 +73,9 @@ const KrediVeriYukleme: React.FC<Props> = ({
   const [duplicatesControl, setDuplicatesControl] = useState(false);
 
   const uyari = [
-    "Boş Bırakılmaması Gereken Sütunlar: Alınan Kredi Numarası, Detay Hesap Kodu, Hesap Adı, Alınan Kredi Tutar, Kredi Alış Tarihi, Faiz Oranı (%)",
+    "Boş Bırakılmaması Gereken Sütunlar: Alınan Kredi Numarası, Kredi Türü, Detay Hesap Kodu, Hesap Adı, Alınan Kredi Tutar, Kredi Alış Tarihi, Faiz Oranı (%)",
     "Alınan Kredi Numarası Sütunu Boş Bırakılmamalıdır Ve Tam Sayı Girilmelidir.",
+    "Kredi Türü Sütunu Boş Bırakılmamalıdır Ve Seçeneklerden Biri Seçilmelidir.",
     "Detay Hesap Kodu Ve Hesap Adı Sütunları Boş Bırakılmamalıdır.",
     "Alınan Kredi Tutar Ve Faiz Oranı (%) Sütunları Boş Bırakılmamalıdır Ve Ondalıklı Sayı Girilmelidir.",
     "Para Birimi Sütununda Seçeneklerden Biri Seçilmelidir Veya Boş Bırakılabilir.",
@@ -210,6 +212,7 @@ const KrediVeriYukleme: React.FC<Props> = ({
   const colHeaders = [
     "Id",
     "Alınan Kredi Numarası",
+    "Kredi Türü",
     "D. Hesap Kodu",
     "Hesap Adı",
     "Alınan Kredi Tutar",
@@ -233,6 +236,12 @@ const KrediVeriYukleme: React.FC<Props> = ({
       validator: integerValidator,
       allowInvalid: false,
     }, // Alınan Kredi Numarası
+    {
+      type: "dropdown",
+      source: ["Taksitli Kredi", "Spot Kredi"],
+      className: "htLeft",
+      allowInvalid: false,
+    }, // Kredi Türü
     {
       type: "text",
       columnSorting: true,
@@ -469,7 +478,7 @@ const KrediVeriYukleme: React.FC<Props> = ({
     for (let i = 0; i < changes.length; i++) {
       const [row, prop, oldValue, newValue] = changes[i];
 
-      if ([4, 7].includes(prop)) {
+      if ([5, 8].includes(prop)) {
         if (typeof newValue === "string") {
           const cleanedNewValue = newValue.replaceAll(/\./g, "");
           changes[i][3] = cleanedNewValue;
@@ -489,6 +498,7 @@ const KrediVeriYukleme: React.FC<Props> = ({
       "yil",
       "id",
       "alinanKrediNumarasi",
+      "tur",
       "detayHesapKodu",
       "hesapAdi",
       "alinanKrediTutar",
@@ -652,6 +662,7 @@ const KrediVeriYukleme: React.FC<Props> = ({
         const newRow: any = [
           veri.id,
           veri.alinanKrediNumarasi,
+          veri.tur,
           veri.detayHesapKodu,
           veri.hesapAdi,
           veri.alinanKrediTutar,
@@ -803,7 +814,7 @@ const KrediVeriYukleme: React.FC<Props> = ({
         height={684}
         colHeaders={colHeaders}
         columns={columns}
-        colWidths={[80, 80, 120, 120, 80, 100, 100, 100]}
+        colWidths={[80, 80, 80, 120, 120, 80, 100, 100, 100]}
         stretchH="all"
         manualColumnResize={true}
         rowHeaders={true}
