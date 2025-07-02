@@ -338,6 +338,7 @@ const Page: React.FC = () => {
                   <Button
                     type="button"
                     size="medium"
+                    disabled={kaydetTiklandimi || tamamlaTiklandimi}
                     variant="outlined"
                     color="primary"
                     onClick={() => setShowDrawer(true)}
