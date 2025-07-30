@@ -54,9 +54,7 @@ const Page: React.FC = () => {
   const fetchData = async () => {
     try {
       const baglantiBilgisi = await getBaglantiBilgileriByLink(
-        `http://fasverigirisitestv1.netlify.app${
-          pathname.split("/KrediDetay")[0]
-        }`
+        `http://betaverigirisi.fasmart.app${pathname.split("/KrediDetay")[0]}`
       );
       if (baglantiBilgisi != undefined) {
         // Tarihleri "DD.MM.YYYY HH:mm" formatında ayarlama
