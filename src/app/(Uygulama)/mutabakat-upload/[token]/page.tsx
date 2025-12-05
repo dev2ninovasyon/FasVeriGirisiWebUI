@@ -21,7 +21,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useParams } from "next/navigation";
-import PageContainer from "@/app/(Uygulama)/components/container/PageContainer";
+import PageContainer from "@/app/(Uygulama)/components/Container/PageContainer";
 import Breadcrumb from "../../components/Layout/Breadcrumb/Breadcrumb";
 import {
     validateMutabakatToken,
