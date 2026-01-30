@@ -20,6 +20,7 @@ import {
 } from "@/api/Veri/Amortisman";
 import numbro from "numbro";
 import trTR from "numbro/languages/tr-TR";
+import WarnBox from "@/app/(Uygulama)/components/Alerts/WarnBox";
 
 // register Handsontable's modules
 registerAllModules();
@@ -222,8 +223,7 @@ const AmortismanVeriYukleme: React.FC<Props> = ({
         const duplicatesMessage = duplicateRowNumbers.join(", ") + " ";
 
         enqueueSnackbar(
-          `${duplicatesMessage}Numaralı Satır${
-            duplicateRowNumbers.length > 1 ? "lar" : ""
+          `${duplicatesMessage}Numaralı Satır${duplicateRowNumbers.length > 1 ? "lar" : ""
           } Tekrar Eden Veri İçeriyor. Kontrol Edin.`,
           {
             variant: "warning",
@@ -499,15 +499,11 @@ const AmortismanVeriYukleme: React.FC<Props> = ({
     }
   };
 
-  const handleAfterRemoveRow = async (
-    index: number,
-    amount: number,
-    physicalRows: number[],
-    source: any
-  ) => {
-    console.log(
-      `Satır(lar) silindi: ${amount} adet satır ${index} indexinden itibaren.${physicalRows}`
-    );
+  const handleAfterRemoveRow = (index: number, amount: number) => {
+    setEndRow((prev) => (prev >= index ? prev - amount : prev));
+    setTimeout(() => {
+      hotTableComponent.current?.hotInstance.render();
+    }, 100);
   };
 
   const afterPaste = async (data: any, coords: any) => {
@@ -542,17 +538,71 @@ const AmortismanVeriYukleme: React.FC<Props> = ({
     for (let i = 0; i < changes.length; i++) {
       const [row, prop, oldValue, newValue] = changes[i];
 
+      // Sayısal Alanlar: 4 (Giriş Tutarı), 5 (Y.D. Artışı), 6 (İptal Y.D.), 7 (Kalıntı Değer), 9 (Faydalı Ömür), 10 (Vuk Faydalı Ömür)
       if ([4, 5, 6, 7, 9, 10].includes(prop)) {
-        if (typeof newValue === "string") {
-          const cleanedNewValue = newValue.replaceAll(/\./g, "");
-          changes[i][3] = cleanedNewValue;
+        if (typeof newValue === "string" && newValue !== "") {
+          const cleanedNewValue = newValue
+            .replace(/\s/g, "")
+            .replaceAll(/\./g, "")
+            .replace(",", ".");
+          changes[i][3] = parseFloat(cleanedNewValue) || 0;
         }
+      }
+
+      // Tarih Alanları: 2 (Satın Alma Tarihi), 3 (Elden Çıkarma Tarihi)
+      if ([2, 3].includes(prop)) {
+        if (typeof newValue === "string" && newValue !== "") {
+          let cleanedValue = newValue
+            .trim()
+            .replace(/\//g, ".")
+            .replace(/-/g, ".");
+
+          // Excel'den gelen saat kısmını temizle (örn. "21.01.2026 00:00:00")
+          if (cleanedValue.includes(" ")) {
+            cleanedValue = cleanedValue.split(" ")[0];
+          }
+
+          const parts = cleanedValue.split(".");
+          if (parts.length === 3) {
+            let day = parts[0];
+            let month = parts[1];
+            let year = parts[2];
+
+            // YYYY.MM.DD ise DD.MM.YYYY yap
+            if (day.length === 4) {
+              const temp = day;
+              day = year;
+              year = temp;
+            }
+
+            const formattedDate = `${day.padStart(2, "0")}.${month.padStart(
+              2,
+              "0"
+            )}.${year}`;
+            changes[i][3] = formattedDate;
+          }
+        }
+      }
+
+      // Eğer kullanıcı yeni bir satıra veri girdiyse endRow'u güncelle
+      if (newValue !== null && newValue !== "" && row > endRow) {
+        setEndRow(row);
       }
     }
   };
 
   const handleCreateAmortismanVerisi = async () => {
-    if (fetchedData.filter((item: any) => item[0]).length == 0) {
+    const hasDataCallback = (item: any) => {
+      // item[0]: Detay Hesap Kodu, item[1]: Hesap Adı, item[2]: Satın Alma Tarihi, item[4]: Giriş Tutarı
+      return (
+        (item[0] && item[0].toString().trim() !== "") ||
+        (item[1] && item[1].toString().trim() !== "") ||
+        (item[2] && item[2].toString().trim() !== "") ||
+        (item[4] && item[4] !== null && item[4] !== undefined)
+      );
+    };
+
+    if (fetchedData.filter(hasDataCallback).length == 0) {
       await handleDeleteAmortismanVerisi();
       return;
     }
@@ -575,7 +625,7 @@ const AmortismanVeriYukleme: React.FC<Props> = ({
       "vukBirikmisAmortismanEnflasyonMuhasebesiIcin",
     ];
     const jsonData = fetchedData
-      .filter((item: any) => item[0])
+      .filter(hasDataCallback)
       .map((item: any) => {
         let obj: { [key: string]: any } = {};
         keys.forEach((key, index) => {
@@ -761,25 +811,25 @@ const AmortismanVeriYukleme: React.FC<Props> = ({
           veri.detayHesapKodu,
           veri.hesapAdi,
           veri.amortismanBaslangicTarihi !== null &&
-          veri.amortismanBaslangicTarihi !== undefined
+            veri.amortismanBaslangicTarihi !== undefined
             ? veri.amortismanBaslangicTarihi
+              .split("T")[0]
+              .split("-")
+              .reverse()
+              .join(".")
+            : null,
+          veri.eldenCikarmaTarihi !== null &&
+            veri.eldenCikarmaTarihi !== undefined
+            ? veri.eldenCikarmaTarihi
+              .split("T")[0]
+              .split("-")
+              .reverse()
+              .join(".") != "01.01.0001"
+              ? veri.eldenCikarmaTarihi
                 .split("T")[0]
                 .split("-")
                 .reverse()
                 .join(".")
-            : null,
-          veri.eldenCikarmaTarihi !== null &&
-          veri.eldenCikarmaTarihi !== undefined
-            ? veri.eldenCikarmaTarihi
-                .split("T")[0]
-                .split("-")
-                .reverse()
-                .join(".") != "01.01.0001"
-              ? veri.eldenCikarmaTarihi
-                  .split("T")[0]
-                  .split("-")
-                  .reverse()
-                  .join(".")
               : null
             : null,
           veri.girisTutari,
@@ -884,43 +934,21 @@ const AmortismanVeriYukleme: React.FC<Props> = ({
       const diff = customizer.isCollapse
         ? 0
         : customizer.SidebarWidth && customizer.MiniSidebarWidth
-        ? customizer.SidebarWidth - customizer.MiniSidebarWidth
-        : 0;
+          ? customizer.SidebarWidth - customizer.MiniSidebarWidth
+          : 0;
 
       hotTableComponent.current.hotInstance.updateSettings({
         width: customizer.isCollapse
           ? "100%"
           : hotTableComponent.current.hotInstance.rootElement.clientWidth -
-            diff,
+          diff,
       });
     }
   }, [customizer.isCollapse]);
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} lg={12}>
-          <Paper
-            elevation={2}
-            sx={{
-              p: 1,
-              mb: 2,
-              borderRadius: 1,
-              backgroundColor: "warning.light",
-            }}
-          >
-            {uyari.map((mesaj, index) => (
-              <Typography
-                key={index}
-                variant="body1"
-                sx={{ color: "warning.dark" }}
-              >
-                - {mesaj}
-              </Typography>
-            ))}
-          </Paper>
-        </Grid>
-      </Grid>
+      <WarnBox warn={uyari} />
       <HotTable
         style={{
           height: "100%",

@@ -20,6 +20,7 @@ import {
 } from "@/api/Veri/DavaKarsiliklari";
 import numbro from "numbro";
 import trTR from "numbro/languages/tr-TR";
+import WarnBox from "@/app/(Uygulama)/components/Alerts/WarnBox";
 
 // register Handsontable's modules
 registerAllModules();
@@ -166,8 +167,7 @@ const DavaKarsiliklariVeriYukleme: React.FC<Props> = ({
         const duplicatesMessage = duplicateRowNumbers.join(", ") + " ";
 
         enqueueSnackbar(
-          `${duplicatesMessage}Numaralı Satır${
-            duplicateRowNumbers.length > 1 ? "lar" : ""
+          `${duplicatesMessage}Numaralı Satır${duplicateRowNumbers.length > 1 ? "lar" : ""
           } Tekrar Eden Veri İçeriyor. Kontrol Edin.`,
           {
             variant: "warning",
@@ -442,15 +442,11 @@ const DavaKarsiliklariVeriYukleme: React.FC<Props> = ({
     }
   };
 
-  const handleAfterRemoveRow = async (
-    index: number,
-    amount: number,
-    physicalRows: number[],
-    source: any
-  ) => {
-    console.log(
-      `Satır(lar) silindi: ${amount} adet satır ${index} indexinden itibaren.${physicalRows}`
-    );
+  const handleAfterRemoveRow = (index: number, amount: number) => {
+    setEndRow((prev) => (prev >= index ? prev - amount : prev));
+    setTimeout(() => {
+      hotTableComponent.current?.hotInstance.render();
+    }, 100);
   };
 
   const afterPaste = async (data: any, coords: any) => {
@@ -485,17 +481,36 @@ const DavaKarsiliklariVeriYukleme: React.FC<Props> = ({
     for (let i = 0; i < changes.length; i++) {
       const [row, prop, oldValue, newValue] = changes[i];
 
-      if ([7].includes(prop)) {
-        if (typeof newValue === "string") {
-          const cleanedNewValue = newValue.replaceAll(/\./g, "");
-          changes[i][3] = cleanedNewValue;
+      // Sayısal Alanlar: 3 (Dava Yılı), 7 (Muhtemel Değer)
+      if ([3, 7].includes(prop)) {
+        if (typeof newValue === "string" && newValue !== "") {
+          const cleanedNewValue = newValue
+            .replace(/\s/g, "")
+            .replaceAll(/\./g, "")
+            .replace(",", ".");
+          changes[i][3] = parseFloat(cleanedNewValue) || 0;
         }
+      }
+
+      // Eğer kullanıcı yeni bir satıra veri girdiyse endRow'u güncelle
+      if (newValue !== null && newValue !== "" && row > endRow) {
+        setEndRow(row);
       }
     }
   };
 
   const handleCreateDavaKarsiliklariVerisi = async () => {
-    if (fetchedData.filter((item: any) => item[0]).length == 0) {
+    const hasDataCallback = (item: any) => {
+      // item[0]: Unvan, item[1]: Aleyhte/Lehte, item[2]: Konu, item[7]: Muhtemel Değer
+      return (
+        (item[0] && item[0].toString().trim() !== "") ||
+        (item[1] && item[1].toString().trim() !== "") ||
+        (item[2] && item[2].toString().trim() !== "") ||
+        (item[7] && item[7] !== null && item[7] !== undefined)
+      );
+    };
+
+    if (fetchedData.filter(hasDataCallback).length == 0) {
       await handleDeleteDavaKarsiliklariVerisi();
       return;
     }
@@ -516,7 +531,7 @@ const DavaKarsiliklariVeriYukleme: React.FC<Props> = ({
     ];
 
     const jsonData = fetchedData
-      .filter((item: any) => item[0])
+      .filter(hasDataCallback)
       .map((item: any) => {
         let obj: { [key: string]: any } = {};
         keys.forEach((key, index) => {
@@ -758,43 +773,21 @@ const DavaKarsiliklariVeriYukleme: React.FC<Props> = ({
       const diff = customizer.isCollapse
         ? 0
         : customizer.SidebarWidth && customizer.MiniSidebarWidth
-        ? customizer.SidebarWidth - customizer.MiniSidebarWidth
-        : 0;
+          ? customizer.SidebarWidth - customizer.MiniSidebarWidth
+          : 0;
 
       hotTableComponent.current.hotInstance.updateSettings({
         width: customizer.isCollapse
           ? "100%"
           : hotTableComponent.current.hotInstance.rootElement.clientWidth -
-            diff,
+          diff,
       });
     }
   }, [customizer.isCollapse]);
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} lg={12}>
-          <Paper
-            elevation={2}
-            sx={{
-              p: 1,
-              mb: 2,
-              borderRadius: 1,
-              backgroundColor: "warning.light",
-            }}
-          >
-            {uyari.map((mesaj, index) => (
-              <Typography
-                key={index}
-                variant="body1"
-                sx={{ color: "warning.dark" }}
-              >
-                - {mesaj}
-              </Typography>
-            ))}
-          </Paper>
-        </Grid>
-      </Grid>
+      <WarnBox warn={uyari} />
       <HotTable
         style={{
           height: "100%",

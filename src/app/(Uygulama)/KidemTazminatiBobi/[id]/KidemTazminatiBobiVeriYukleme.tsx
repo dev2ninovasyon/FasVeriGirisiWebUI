@@ -20,6 +20,7 @@ import {
 } from "@/api/Veri/KidemTazminatiBobi";
 import numbro from "numbro";
 import trTR from "numbro/languages/tr-TR";
+import WarnBox from "@/app/(Uygulama)/components/Alerts/WarnBox";
 
 // register Handsontable's modules
 registerAllModules();
@@ -211,8 +212,7 @@ const KidemTazminatiBobiVeriYukleme: React.FC<Props> = ({
         const duplicatesMessage = duplicateRowNumbers.join(", ") + " ";
 
         enqueueSnackbar(
-          `${duplicatesMessage}Numaralı Satır${
-            duplicateRowNumbers.length > 1 ? "lar" : ""
+          `${duplicatesMessage}Numaralı Satır${duplicateRowNumbers.length > 1 ? "lar" : ""
           } Tekrar Eden Veri İçeriyor. Kontrol Edin.`,
           {
             variant: "warning",
@@ -516,15 +516,11 @@ const KidemTazminatiBobiVeriYukleme: React.FC<Props> = ({
     }
   };
 
-  const handleAfterRemoveRow = async (
-    index: number,
-    amount: number,
-    physicalRows: number[],
-    source: any
-  ) => {
-    console.log(
-      `Satır(lar) silindi: ${amount} adet satır ${index} indexinden itibaren.${physicalRows}`
-    );
+  const handleAfterRemoveRow = (index: number, amount: number) => {
+    setEndRow((prev) => (prev >= index ? prev - amount : prev));
+    setTimeout(() => {
+      hotTableComponent.current?.hotInstance.render();
+    }, 100);
   };
 
   const afterPaste = async (data: any, coords: any) => {
@@ -559,17 +555,70 @@ const KidemTazminatiBobiVeriYukleme: React.FC<Props> = ({
     for (let i = 0; i < changes.length; i++) {
       const [row, prop, oldValue, newValue] = changes[i];
 
+      // Sayısal Alanlar: 5 (Brüt Ücret), 8 (Ödenen Kıdem), 10 (Kullanılmamış İzin Günü), 11 (İzne Esas Brüt Ücret)
       if ([5, 8, 10, 11].includes(prop)) {
-        if (typeof newValue === "string") {
-          const cleanedNewValue = newValue.replaceAll(/\./g, "");
-          changes[i][3] = cleanedNewValue;
+        if (typeof newValue === "string" && newValue !== "") {
+          const cleanedNewValue = newValue
+            .replace(/\s/g, "")
+            .replaceAll(/\./g, "")
+            .replace(",", ".");
+          changes[i][3] = parseFloat(cleanedNewValue) || 0;
         }
+      }
+
+      // Tarih Alanları: 3 (Doğum Tarihi), 6 (Giriş Tarihi), 7 (Çıkış Tarihi)
+      if ([3, 6, 7].includes(prop)) {
+        if (typeof newValue === "string" && newValue !== "") {
+          let cleanedValue = newValue
+            .trim()
+            .replace(/\//g, ".")
+            .replace(/-/g, ".");
+
+          // Excel'den gelen saat kısmını temizle (örn. "21.01.2026 00:00:00")
+          if (cleanedValue.includes(" ")) {
+            cleanedValue = cleanedValue.split(" ")[0];
+          }
+
+          const parts = cleanedValue.split(".");
+          if (parts.length === 3) {
+            let day = parts[0];
+            let month = parts[1];
+            let year = parts[2];
+
+            // YYYY.MM.DD ise DD.MM.YYYY yap
+            if (day.length === 4) {
+              const temp = day;
+              day = year;
+              year = temp;
+            }
+
+            const formattedDate = `${day.padStart(2, "0")}.${month.padStart(
+              2,
+              "0"
+            )}.${year}`;
+            changes[i][3] = formattedDate;
+          }
+        }
+      }
+
+      // Eğer kullanıcı yeni bir satıra veri girdiyse endRow'u güncelle
+      if (newValue !== null && newValue !== "" && row > endRow) {
+        setEndRow(row);
       }
     }
   };
 
   const handleCreateKidemTazminatiBobiVerisi = async () => {
-    if (fetchedData.filter((item: any) => item[1]).length == 0) {
+    const hasDataCallback = (item: any) => {
+      // item[1]: Adı Soyadı, item[4]: Görev Departmanı, item[5]: Brüt Ücret
+      return (
+        (item[1] && item[1].toString().trim() !== "") ||
+        (item[4] && item[4].toString().trim() !== "") ||
+        (item[5] && item[5] !== null && item[5] !== undefined)
+      );
+    };
+
+    if (fetchedData.filter(hasDataCallback).length == 0) {
       await handleDeleteKidemTazminatiBobiVerisi();
       return;
     }
@@ -592,7 +641,7 @@ const KidemTazminatiBobiVeriYukleme: React.FC<Props> = ({
     ];
 
     const jsonData = fetchedData
-      .filter((item: any) => item[1])
+      .filter(hasDataCallback)
       .map((item: any) => {
         let obj: { [key: string]: any } = {};
         keys.forEach((key, index) => {
@@ -777,25 +826,25 @@ const KidemTazminatiBobiVeriYukleme: React.FC<Props> = ({
           veri.gorevDepartmani,
           veri.brutUcretiAylik,
           veri.isletmeyeGirisTarihi !== null &&
-          veri.isletmeyeGirisTarihi !== undefined
+            veri.isletmeyeGirisTarihi !== undefined
             ? veri.isletmeyeGirisTarihi
+              .split("T")[0]
+              .split("-")
+              .reverse()
+              .join(".")
+            : null,
+          veri.isletmedenCikisTarihi != null &&
+            veri.isletmedenCikisTarihi != undefined
+            ? veri.isletmedenCikisTarihi
+              .split("T")[0]
+              .split("-")
+              .reverse()
+              .join(".") != "01.01.0001"
+              ? veri.isletmedenCikisTarihi
                 .split("T")[0]
                 .split("-")
                 .reverse()
                 .join(".")
-            : null,
-          veri.isletmedenCikisTarihi != null &&
-          veri.isletmedenCikisTarihi != undefined
-            ? veri.isletmedenCikisTarihi
-                .split("T")[0]
-                .split("-")
-                .reverse()
-                .join(".") != "01.01.0001"
-              ? veri.isletmedenCikisTarihi
-                  .split("T")[0]
-                  .split("-")
-                  .reverse()
-                  .join(".")
               : null
             : null,
           veri.odenenBrutKidemTazminatiBobiTutariTL,
@@ -895,101 +944,83 @@ const KidemTazminatiBobiVeriYukleme: React.FC<Props> = ({
       const diff = customizer.isCollapse
         ? 0
         : customizer.SidebarWidth && customizer.MiniSidebarWidth
-        ? customizer.SidebarWidth - customizer.MiniSidebarWidth
-        : 0;
+          ? customizer.SidebarWidth - customizer.MiniSidebarWidth
+          : 0;
 
       hotTableComponent.current.hotInstance.updateSettings({
         width: customizer.isCollapse
           ? "100%"
           : hotTableComponent.current.hotInstance.rootElement.clientWidth -
-            diff,
+          diff,
       });
     }
   }, [customizer.isCollapse]);
 
   return (
     <>
+      <WarnBox warn={uyari} />
       <Grid container>
         <Grid item xs={12} lg={12}>
-          <Paper
-            elevation={2}
-            sx={{
-              p: 1,
-              mb: 2,
-              borderRadius: 1,
-              backgroundColor: "warning.light",
+          <HotTable
+            style={{
+              height: "100%",
+              width: "100%",
+              maxHeight: 684,
+              maxWidth: "100%",
             }}
-          >
-            {uyari.map((mesaj, index) => (
-              <Typography
-                key={index}
-                variant="body1"
-                sx={{ color: "warning.dark" }}
-              >
-                - {mesaj}
-              </Typography>
-            ))}
-          </Paper>
-        </Grid>
-      </Grid>
-      <HotTable
-        style={{
-          height: "100%",
-          width: "100%",
-          maxHeight: 684,
-          maxWidth: "100%",
-        }}
-        language={dictionary.languageCode}
-        ref={hotTableComponent}
-        data={fetchedData}
-        height={684}
-        colHeaders={colHeaders}
-        columns={columns}
-        colWidths={[80, 110, 80, 90, 100, 100, 90, 90, 110, 130, 80, 90]}
-        stretchH="all"
-        manualColumnResize={true}
-        rowHeaders={true}
-        rowHeights={35}
-        autoWrapRow={true}
-        minRows={rowCount}
-        minCols={12}
-        filters={true}
-        columnSorting={true}
-        dropdownMenu={[
-          "filter_by_condition",
-          "filter_by_value",
-          "filter_action_bar",
-        ]}
-        licenseKey="non-commercial-and-evaluation" // for non-commercial use only
-        afterGetColHeader={afterGetColHeader}
-        afterGetRowHeader={afterGetRowHeader}
-        afterRenderer={afterRenderer}
-        afterPaste={afterPaste} // Add afterPaste hook
-        afterChange={handleAfterChange} // Add afterChange hook
-        beforeChange={handleBeforeChange} // Add beforeChange hook
-        afterCreateRow={handleCreateRow} // Add createRow hook
-        afterRemoveRow={handleAfterRemoveRow} // Add afterRemoveRow hook
-        contextMenu={[
-          "row_above",
-          "row_below",
-          "remove_row",
-          "alignment",
-          "copy",
-        ]}
-      />
-      <Grid container marginTop={2}>
-        <Grid
-          item
-          xs={12}
-          lg={12}
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <ExceleAktarButton
-            handleDownload={handleDownload}
-          ></ExceleAktarButton>
+            language={dictionary.languageCode}
+            ref={hotTableComponent}
+            data={fetchedData}
+            height={684}
+            colHeaders={colHeaders}
+            columns={columns}
+            colWidths={[80, 110, 80, 90, 100, 100, 90, 90, 110, 130, 80, 90]}
+            stretchH="all"
+            manualColumnResize={true}
+            rowHeaders={true}
+            rowHeights={35}
+            autoWrapRow={true}
+            minRows={rowCount}
+            minCols={12}
+            filters={true}
+            columnSorting={true}
+            dropdownMenu={[
+              "filter_by_condition",
+              "filter_by_value",
+              "filter_action_bar",
+            ]}
+            licenseKey="non-commercial-and-evaluation" // for non-commercial use only
+            afterGetColHeader={afterGetColHeader}
+            afterGetRowHeader={afterGetRowHeader}
+            afterRenderer={afterRenderer}
+            afterPaste={afterPaste} // Add afterPaste hook
+            afterChange={handleAfterChange} // Add afterChange hook
+            beforeChange={handleBeforeChange} // Add beforeChange hook
+            afterCreateRow={handleCreateRow} // Add createRow hook
+            afterRemoveRow={handleAfterRemoveRow} // Add afterRemoveRow hook
+            contextMenu={[
+              "row_above",
+              "row_below",
+              "remove_row",
+              "alignment",
+              "copy",
+            ]}
+          />
+          <Grid container marginTop={2}>
+            <Grid
+              item
+              xs={12}
+              lg={12}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <ExceleAktarButton
+                handleDownload={handleDownload}
+              ></ExceleAktarButton>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </>
