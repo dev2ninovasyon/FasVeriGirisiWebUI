@@ -11,12 +11,14 @@ interface ConfirmPopUpProps {
   isConfirmPopUp: boolean;
   handleClose: () => void;
   handleDelete: () => void;
+  isLoading?: boolean;
 }
 
 export const ConfirmPopUp: React.FC<ConfirmPopUpProps> = ({
   isConfirmPopUp,
   handleClose,
   handleDelete,
+  isLoading
 }) => {
   return (
     <Dialog maxWidth={"lg"} open={isConfirmPopUp} onClose={handleClose}>
@@ -39,17 +41,18 @@ export const ConfirmPopUp: React.FC<ConfirmPopUpProps> = ({
               <Button
                 variant="outlined"
                 color="error"
+                disabled={isLoading}
                 onClick={() => {
                   handleDelete();
-                  handleClose();
                 }}
                 sx={{ width: "100%", mb: 1 }}
               >
-                Evet, Sil
+                {isLoading ? "Siliniyor..." : "Evet, Sil"}
               </Button>
               <Button
                 variant="outlined"
                 color="success"
+                disabled={isLoading}
                 onClick={() => handleClose()}
                 sx={{ width: "100%" }}
               >
