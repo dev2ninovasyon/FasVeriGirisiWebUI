@@ -105,6 +105,37 @@ const DosyaTable: React.FC<MyComponentProps> = ({
   const [openCartAlert, setOpenCartAlert] = useState(false);
 
   const [message, setMessage] = useState<string>("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isLoadingPreview, setIsLoadingPreview] = useState<number | null>(null);
+
+  function normalizeString(str: string): string {
+    const turkishChars: { [key: string]: string } = {
+      ç: "c",
+      ğ: "g",
+      ı: "i",
+      ö: "o",
+      ş: "s",
+      ü: "u",
+      Ç: "C",
+      Ğ: "G",
+      İ: "I",
+      Ö: "O",
+      Ş: "S",
+      Ü: "U",
+    };
+
+    // Türkçe karakterleri değiştir
+    let normalized = str.replace(
+      /[çğıöşüÇĞÖŞÜıİ]/g,
+      (match) => turkishChars[match] || match
+    );
+
+    // Tüm boşluk, tab, satır başı/sonu karakterlerini sil
+    normalized = normalized.replace(/\s+/g, "");
+
+    // Küçük harfe çevir
+    return normalized.toLowerCase();
+  }
 
   const extractParts = (
     adi: string
@@ -272,6 +303,10 @@ const DosyaTable: React.FC<MyComponentProps> = ({
   };
 
   const handlePreview2 = async () => {
+    if (isLoadingPreview !== null) return; // Prevent double-click
+
+    setIsLoadingPreview(selectedId);
+
     try {
       var controller =
         fileType === "E-DefterKebir" ? "DosyaGoster" : "PdfDosyasiGoster";
@@ -291,8 +326,11 @@ const DosyaTable: React.FC<MyComponentProps> = ({
       const xmlBlobUrl = window.URL.createObjectURL(xmlBlob);
       setXmlBlobUrl(xmlBlobUrl);
       setIsOpen2(true);
+      handleClose();
     } catch (error) {
       console.error("Error fetching XML:", error);
+    } finally {
+      setIsLoadingPreview(null);
     }
   };
 
@@ -363,7 +401,7 @@ const DosyaTable: React.FC<MyComponentProps> = ({
   };
 
   const filteredRows = rows.filter((row) =>
-    row.adi.toLowerCase().includes(searchTerm.toLowerCase())
+    normalizeString(row.adi).includes(normalizeString(searchTerm))
   );
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -398,16 +436,20 @@ const DosyaTable: React.FC<MyComponentProps> = ({
   };
 
   const deleteSelected = async () => {
+    setIsDeleting(true);
     try {
       const result = await deleteDosyaBilgisiMultiple("", selected || 0);
       if (result) {
-        selected.length = 0;
+        setSelected([]);
         fetchData();
+        handleCloseConfirmPopUp();
       } else {
         console.error("Dosya Bilgileri silinemedi");
       }
     } catch (error) {
       console.error("Bir hata oluştu:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -469,9 +511,9 @@ const DosyaTable: React.FC<MyComponentProps> = ({
           <TableBody>
             {(rowsPerPage > 0
               ? filteredRows.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage
-                )
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage
+              )
               : filteredRows
             ).map((row, index) => {
               const isItemSelected = isSelected(row.id);
@@ -496,7 +538,7 @@ const DosyaTable: React.FC<MyComponentProps> = ({
                   <TableCell scope="row">
                     <Typography variant="body1" color="textSecondary">
                       {fileType == "E-DefterKebir" ||
-                      fileType == "E-DefterYevmiye"
+                        fileType == "E-DefterYevmiye"
                         ? row.adi.split("-").slice(1).join("-")
                         : row.adi}
                     </Typography>
@@ -524,18 +566,18 @@ const DosyaTable: React.FC<MyComponentProps> = ({
                             row.durum === "Tamamlandı"
                               ? (theme) => theme.palette.success.light
                               : row.durum === "İşleniyor"
-                              ? (theme) => theme.palette.info.light
-                              : row.durum === "Sıraya Alındı."
-                              ? (theme) => theme.palette.warning.light
-                              : (theme) => theme.palette.error.light,
+                                ? (theme) => theme.palette.info.light
+                                : row.durum === "Sıraya Alındı."
+                                  ? (theme) => theme.palette.warning.light
+                                  : (theme) => theme.palette.error.light,
                           color:
                             row.durum === "Tamamlandı"
                               ? (theme) => theme.palette.success.main
                               : row.durum === "İşleniyor"
-                              ? (theme) => theme.palette.info.main
-                              : row.durum === "Sıraya Alındı."
-                              ? (theme) => theme.palette.warning.main
-                              : (theme) => theme.palette.error.main,
+                                ? (theme) => theme.palette.info.main
+                                : row.durum === "Sıraya Alındı."
+                                  ? (theme) => theme.palette.warning.main
+                                  : (theme) => theme.palette.error.main,
                         }}
                       />
                     </IconButton>
@@ -561,11 +603,11 @@ const DosyaTable: React.FC<MyComponentProps> = ({
                           "aria-labelledby": "basic-button",
                         }}
                       >
-                        <MenuItem onClick={() => handlePreview2()}>
+                        <MenuItem onClick={() => handlePreview2()} disabled={isLoadingPreview === selectedId}>
                           <ListItemIcon>
                             <IconEye width={18} />
                           </ListItemIcon>
-                          Göster
+                          {isLoadingPreview === selectedId ? "Yükleniyor..." : "Göster"}
                         </MenuItem>
                       </Menu>
                     </TableCell>
@@ -635,7 +677,7 @@ const DosyaTable: React.FC<MyComponentProps> = ({
           variant="outlined"
           color="error"
           size="small"
-          disabled={tamamlaTiklandimi}
+          disabled={tamamlaTiklandimi || isDeleting}
           onClick={() => {
             handleIsConfirm();
           }}
@@ -646,7 +688,7 @@ const DosyaTable: React.FC<MyComponentProps> = ({
             marginY: smDown ? "8px" : "12px",
           }}
         >
-          {selected.length} Kayıt Sil
+          {isDeleting ? "Siliniyor..." : `${selected.length} Kayıt Sil`}
         </Button>
       )}
       <Table>
@@ -672,8 +714,7 @@ const DosyaTable: React.FC<MyComponentProps> = ({
               ActionsComponent={TablePaginationActions}
               labelRowsPerPage="Sayfa başına satır sayısı:"
               labelDisplayedRows={({ from, to, count }) =>
-                `${from}-${to} arası / ${
-                  count !== -1 ? count : `daha fazla`
+                `${from}-${to} arası / ${count !== -1 ? count : `daha fazla`
                 } satır`
               }
               sx={{ mt: 0.5, mr: "2px", border: 0 }}
@@ -686,6 +727,7 @@ const DosyaTable: React.FC<MyComponentProps> = ({
           isConfirmPopUp={isConfirmPopUpOpen}
           handleClose={handleCloseConfirmPopUp}
           handleDelete={deleteSelected}
+          isLoading={isDeleting}
         />
       )}
       {isAlertOpen && fileType === "E-DefterKebir" && (
