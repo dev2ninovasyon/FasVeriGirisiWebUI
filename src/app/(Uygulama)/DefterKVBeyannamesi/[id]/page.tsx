@@ -66,7 +66,7 @@ interface Veri {
   tip: string;
 }
 
-const Page: React.FC = () => {
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const smDown = useMediaQuery((theme: any) => theme.breakpoints.down("sm"));
 
   const customizer = useSelector((state: AppState) => state.customizer);
@@ -209,8 +209,8 @@ const Page: React.FC = () => {
     onDrop,
     accept: {
       [`application/${fileType === "E-DefterKebir" || fileType === "E-DefterYevmiye"
-          ? "xml"
-          : "pdf"
+        ? "xml"
+        : "pdf"
         }`]: [
           `.${fileType === "E-DefterKebir" || fileType === "E-DefterYevmiye"
             ? "xml"
@@ -329,9 +329,7 @@ const Page: React.FC = () => {
         {fetchedData != null && (
           <>
             <Grid
-              item
-              xs={12}
-              lg={12}
+              size={{ xs: 12, lg: 12 }}
               sx={{
                 display: "flex",
                 flexDirection: smDown ? "column" : "row",
@@ -363,7 +361,7 @@ const Page: React.FC = () => {
                 </Button>
               </Box>
             </Grid>
-            <Grid item xs={12} lg={5}>
+            <Grid size={{ xs: 12, lg: 5 }}>
               <Box
                 sx={{
                   height: "550px",
@@ -441,9 +439,7 @@ const Page: React.FC = () => {
                       justifyContent="center"
                     >
                       <Grid
-                        item
-                        sm={12}
-                        lg={12}
+                        size={{ sm: 12, lg: 12 }}
                         style={{ textAlign: "center" }}
                       >
                         <Typography>Dosyaları buraya bırakın...</Typography>
@@ -457,9 +453,7 @@ const Page: React.FC = () => {
                       justifyContent="center"
                     >
                       <Grid
-                        item
-                        sm={12}
-                        lg={12}
+                        size={{ sm: 12, lg: 12 }}
                         style={{ textAlign: "center" }}
                       >
                         {uploading ? (
@@ -527,7 +521,7 @@ const Page: React.FC = () => {
                 </Box>
               </Box>
             </Grid>
-            <Grid item xs={12} lg={7}>
+            <Grid size={{ xs: 12, lg: 7 }}>
               <Box
                 sx={{
                   height: smDown ? "610px" : "550px",
@@ -547,13 +541,10 @@ const Page: React.FC = () => {
               </Box>
             </Grid>
             {fileType === "E-DefterKebir" && (
-              <Grid item xs={12} lg={12}>
+              <Grid size={{ xs: 12, lg: 12 }}>
                 <Grid container spacing={2}>
                   <Grid
-                    item
-                    xs={12}
-                    md={12}
-                    lg={12}>
+                    size={{ xs: 12, md: 12, lg: 12 }}>
                     <Typography variant="h6" textAlign="left" mb={1}>
                       Yüklenen Defter Sayıları:
                     </Typography>
@@ -569,10 +560,7 @@ const Page: React.FC = () => {
                     return (
                       <Grid
                         key={index}
-                        item
-                        xs={6}
-                        md={3}
-                        lg={2}>
+                        size={{ xs: 6, md: 3, lg: 2 }}>
                         <Paper
                           elevation={2}
                           sx={{

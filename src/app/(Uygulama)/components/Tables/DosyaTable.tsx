@@ -24,7 +24,7 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import { Stack } from "@mui/system";
-import TablePaginationActions from "@mui/material/TablePagination/TablePaginationActions";
+import TablePaginationActions from "@mui/material/TablePaginationActions";
 import {
   deleteDosyaBilgisiMultiple,
   getDefterYuklemeLoglari,

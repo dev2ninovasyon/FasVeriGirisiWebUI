@@ -29,9 +29,8 @@ import {
     ValidateMutabakatTokenResponse,
 } from "@/api/MutabakatMektup"; // Bu API client'ı betaverigirisi uygulamasına kopyalayın
 
-export default function MutabakatUploadPage() {
-    const params = useParams();
-    const token = params.token as string;
+export default function MutabakatUploadPage({ params }: { params: Promise<{ token: string }> }) {
+    const { token } = React.use(params);
     const theme = useTheme();
     const [isValidating, setIsValidating] = useState(true);
     const [validationData, setValidationData] = useState<ValidateMutabakatTokenResponse | null>(null);

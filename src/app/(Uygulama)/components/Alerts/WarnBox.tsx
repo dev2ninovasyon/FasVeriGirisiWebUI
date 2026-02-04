@@ -11,9 +11,8 @@ const WarnBox = ({ warn, noMargin = false }: Props) => {
         <React.Fragment>
             <Grid container>
                 <Grid
-                    item
-                    xs={12}
-                    lg={12}>
+                    size={{ xs: 12, lg: 12 }}
+                >
                     <Paper
                         elevation={2}
                         sx={{

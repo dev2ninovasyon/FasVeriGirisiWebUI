@@ -53,7 +53,7 @@ interface Veri {
   tip: string;
 }
 
-const Page: React.FC = () => {
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const smDown = useMediaQuery((theme: any) => theme.breakpoints.down("sm"));
 
   const customizer = useSelector((state: AppState) => state.customizer);
@@ -434,13 +434,11 @@ const Page: React.FC = () => {
         }
       />
       <Grid container>
-        <Grid item xs={12} lg={12}>
+        <Grid size={{ xs: 12, lg: 12 }}>
           {fetchedData != null && (
             <Grid container>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   flexDirection: smDown ? "column" : "row",
@@ -504,7 +502,7 @@ const Page: React.FC = () => {
                   </Button>
                 </Box>
               </Grid>
-              <Grid item xs={12} lg={12}>
+              <Grid size={{ xs: 12, lg: 12 }}>
                 <KidemTazminatiTfrsVeriYukleme
                   denetciId={fetchedData?.denetciId}
                   denetlenenId={fetchedData?.denetlenenId}
@@ -541,16 +539,14 @@ const Page: React.FC = () => {
           <DialogContent>
             <Grid container>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
                   justifyContent: "space-between",
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="hesaplananKarsilik"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -560,7 +556,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="hesaplananKarsilik"
                     type="number"
@@ -573,9 +569,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -583,7 +577,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="birikmisFon"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -593,7 +587,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="birikmisFon"
                     type="number"
@@ -606,9 +600,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -616,7 +608,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="hesaplansinMi"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -627,7 +619,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomSelect
                     labelId="hesaplansinMi"
                     id="hesaplansinMi"
@@ -642,9 +634,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -652,7 +642,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="izinKarsiligi"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -662,7 +652,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="izinKarsiligi"
                     type="number"
@@ -675,9 +665,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -685,7 +673,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="enflasyonOrani"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -695,7 +683,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="enflasyonOrani"
                     type="number"
@@ -706,9 +694,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -716,7 +702,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="faizOrani"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -726,7 +712,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="faizOrani"
                     type="number"
@@ -737,9 +723,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -747,7 +731,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="vergiOrani"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -757,7 +741,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="vergiOrani"
                     type="number"
@@ -770,9 +754,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -780,7 +762,7 @@ const Page: React.FC = () => {
                   mt: 2,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="ayrilan2019"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -791,7 +773,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="ayrilan2019"
                     type="number"
@@ -804,9 +786,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -814,7 +794,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="personel2019"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -825,7 +805,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="personel2019"
                     type="number"
@@ -838,9 +818,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -848,7 +826,7 @@ const Page: React.FC = () => {
                   mt: 2,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="ayrilan2020"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -859,7 +837,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="ayrilan2020"
                     type="number"
@@ -872,9 +850,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -882,7 +858,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="personel2020"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -893,7 +869,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="personel2020"
                     type="number"
@@ -906,9 +882,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -916,7 +890,7 @@ const Page: React.FC = () => {
                   mt: 2,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="ayrilan2021"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -927,7 +901,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="ayrilan2021"
                     type="number"
@@ -940,9 +914,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -950,7 +922,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="personel2021"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -961,7 +933,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="personel2021"
                     type="number"
@@ -974,9 +946,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -984,7 +954,7 @@ const Page: React.FC = () => {
                   mt: 2,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="ayrilan2022"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -995,7 +965,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="ayrilan2022"
                     type="number"
@@ -1008,9 +978,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1018,7 +986,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="personel2022"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1029,7 +997,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="personel2022"
                     type="number"
@@ -1042,9 +1010,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1052,7 +1018,7 @@ const Page: React.FC = () => {
                   mt: 2,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="ayrilan2023"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1063,7 +1029,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="ayrilan2023"
                     type="number"
@@ -1076,9 +1042,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1086,7 +1050,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="personel2023"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1097,7 +1061,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="personel2023"
                     type="number"
@@ -1110,9 +1074,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1120,7 +1082,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="odenenKidemTazminati170"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1130,7 +1092,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="odenenKidemTazminati170"
                     type="number"
@@ -1143,9 +1105,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1153,7 +1113,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="kullanilmamisIzinKarsiligi170"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1163,7 +1123,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="kullanilmamisIzinKarsiligi170"
                     type="number"
@@ -1176,9 +1136,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1186,7 +1144,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="odenenKidemTazminati258"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1196,7 +1154,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="odenenKidemTazminati258"
                     type="number"
@@ -1209,9 +1167,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1219,7 +1175,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="kullanilmamisIzinKarsiligi258"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1229,7 +1185,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="kullanilmamisIzinKarsiligi258"
                     type="number"
@@ -1242,9 +1198,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1252,7 +1206,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="odenenKidemTazminati720"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1262,7 +1216,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="odenenKidemTazminati720"
                     type="number"
@@ -1275,9 +1229,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1285,7 +1237,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="kullanilmamisIzinKarsiligi720"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1295,7 +1247,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="kullanilmamisIzinKarsiligi720"
                     type="number"
@@ -1308,9 +1260,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1318,7 +1268,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="odenenKidemTazminati730"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1328,7 +1278,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="odenenKidemTazminati730"
                     type="number"
@@ -1341,9 +1291,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1351,7 +1299,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="kullanilmamisIzinKarsiligi730"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1361,7 +1309,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="kullanilmamisIzinKarsiligi730"
                     type="number"
@@ -1374,9 +1322,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1384,7 +1330,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="odenenKidemTazminati740"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1394,7 +1340,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="odenenKidemTazminati740"
                     type="number"
@@ -1407,9 +1353,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1417,7 +1361,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="kullanilmamisIzinKarsiligi740"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1427,7 +1371,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="kullanilmamisIzinKarsiligi740"
                     type="number"
@@ -1440,9 +1384,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1450,7 +1392,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="odenenKidemTazminati750"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1460,7 +1402,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="odenenKidemTazminati750"
                     type="number"
@@ -1473,9 +1415,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1483,7 +1423,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="kullanilmamisIzinKarsiligi750"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1493,7 +1433,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="kullanilmamisIzinKarsiligi750"
                     type="number"
@@ -1506,9 +1446,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1516,7 +1454,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="odenenKidemTazminati760"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1526,7 +1464,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="odenenKidemTazminati760"
                     type="number"
@@ -1539,9 +1477,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1549,7 +1485,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="kullanilmamisIzinKarsiligi760"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1559,7 +1495,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="kullanilmamisIzinKarsiligi760"
                     type="number"
@@ -1572,9 +1508,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1582,7 +1516,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="odenenKidemTazminati770"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1592,7 +1526,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="odenenKidemTazminati770"
                     type="number"
@@ -1605,9 +1539,7 @@ const Page: React.FC = () => {
                 </Grid>
               </Grid>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   alignContent: "center",
@@ -1615,7 +1547,7 @@ const Page: React.FC = () => {
                   mt: 1,
                 }}
               >
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomFormLabel
                     htmlFor="kullanilmamisIzinKarsiligi770"
                     sx={{ mt: 0, mb: { xs: "-10px", sm: 0 }, mr: 2 }}
@@ -1625,7 +1557,7 @@ const Page: React.FC = () => {
                     </Typography>
                   </CustomFormLabel>
                 </Grid>
-                <Grid item xs={12} lg={6}>
+                <Grid size={{ xs: 12, lg: 6 }}>
                   <CustomTextField
                     id="kullanilmamisIzinKarsiligi770"
                     type="number"

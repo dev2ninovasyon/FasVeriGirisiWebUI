@@ -180,8 +180,7 @@ const KrediDetayVeriYukleme: React.FC<Props> = ({
         const duplicatesMessage = duplicateRowNumbers.join(", ") + " ";
 
         enqueueSnackbar(
-          `${duplicatesMessage}Numaralı Satır${
-            duplicateRowNumbers.length > 1 ? "lar" : ""
+          `${duplicatesMessage}Numaralı Satır${duplicateRowNumbers.length > 1 ? "lar" : ""
           } Tekrar Eden Veri İçeriyor. Kontrol Edin.`,
           {
             variant: "warning",
@@ -797,14 +796,14 @@ const KrediDetayVeriYukleme: React.FC<Props> = ({
       const diff = customizer.isCollapse
         ? 0
         : customizer.SidebarWidth && customizer.MiniSidebarWidth
-        ? customizer.SidebarWidth - customizer.MiniSidebarWidth
-        : 0;
+          ? customizer.SidebarWidth - customizer.MiniSidebarWidth
+          : 0;
 
       hotTableComponent.current.hotInstance.updateSettings({
         width: customizer.isCollapse
           ? "100%"
           : hotTableComponent.current.hotInstance.rootElement.clientWidth -
-            diff,
+          diff,
       });
     }
   }, [customizer.isCollapse]);
@@ -812,7 +811,7 @@ const KrediDetayVeriYukleme: React.FC<Props> = ({
   return (
     <>
       <Grid container>
-        <Grid item xs={12} lg={12}>
+        <Grid size={{ xs: 12, lg: 12 }}>
           <Paper
             elevation={2}
             sx={{
@@ -874,24 +873,22 @@ const KrediDetayVeriYukleme: React.FC<Props> = ({
         contextMenu={
           tur === "Taksitli Kredi"
             ? {
-                items: [
-                  "row_above",
-                  "row_below",
-                  "remove_row",
-                  "alignment",
-                  "copy",
-                ],
-              }
+              items: [
+                "row_above",
+                "row_below",
+                "remove_row",
+                "alignment",
+                "copy",
+              ],
+            }
             : {
-                items: ["alignment", "copy"],
-              }
+              items: ["alignment", "copy"],
+            }
         }
       />
       <Grid container marginTop={2}>
         <Grid
-          item
-          xs={12}
-          lg={12}
+          size={{ xs: 12, lg: 12 }}
           sx={{
             display: "flex",
             justifyContent: "flex-end",

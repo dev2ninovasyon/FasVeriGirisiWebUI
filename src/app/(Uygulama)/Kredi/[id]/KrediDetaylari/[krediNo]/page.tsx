@@ -32,13 +32,14 @@ interface Veri {
   tip: string;
 }
 
-const Page: React.FC = () => {
+const Page = ({ params }: { params: Promise<{ id: string; krediNo: string }> }) => {
+  const { id, krediNo: pathKrediNo } = React.use(params);
+  const pathId = parseInt(id);
   const smDown = useMediaQuery((theme: any) => theme.breakpoints.down("sm"));
 
   const pathname = usePathname();
   const segments = pathname.split("/");
   const idIndex = segments.indexOf("KrediDetaylari") + 1;
-  const pathId = parseInt(segments[idIndex]);
 
   const [krediNo, setKrediNo] = useState(0);
 
@@ -138,13 +139,11 @@ const Page: React.FC = () => {
         }
       />
       <Grid container>
-        <Grid item xs={12} lg={12}>
+        <Grid size={{ xs: 12, lg: 12 }}>
           {fetchedData != null && (
             <Grid container>
               <Grid
-                item
-                xs={12}
-                lg={12}
+                size={{ xs: 12, lg: 12 }}
                 sx={{
                   display: "flex",
                   flexDirection: smDown ? "column" : "row",
@@ -186,7 +185,7 @@ const Page: React.FC = () => {
                   </Button>
                 </Box>
               </Grid>
-              <Grid item xs={12} lg={12}>
+              <Grid size={{ xs: 12, lg: 12 }}>
                 <KrediDetayVeriYukleme
                   denetciId={fetchedData?.denetciId}
                   denetlenenId={fetchedData?.denetlenenId}

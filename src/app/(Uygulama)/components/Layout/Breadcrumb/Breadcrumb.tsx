@@ -23,7 +23,7 @@ const Breadcrumb = ({ title, subtitle, note }: BreadCrumbType) => {
       container
       sx={{
         backgroundColor: "primary.light",
-        borderRadius: (theme: Theme) => theme.shape.borderRadius / 4,
+        borderRadius: (theme: Theme) => (theme.shape.borderRadius as any) / 4,
         p: "30px 25px 20px",
         marginBottom: "20px",
         position: "relative",
@@ -33,8 +33,7 @@ const Breadcrumb = ({ title, subtitle, note }: BreadCrumbType) => {
     >
       {smDown && (
         <Grid
-          item
-          xs={12}
+          size={{ xs: 12 }}
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -53,22 +52,19 @@ const Breadcrumb = ({ title, subtitle, note }: BreadCrumbType) => {
         </Grid>
       )}
       <Grid
-        item
-        xs={12}
-        sm={6}
-        lg={8}
+        size={{ xs: 12, sm: 6, lg: 8 }}
         display="flex"
         alignItems="center"
         justifyContent={smDown ? "center" : "flex-start"}
       >
         <Grid container>
-          <Grid item xs={12} sm={12} lg={12}>
+          <Grid size={{ xs: 12, sm: 12, lg: 12 }}>
             <Typography textAlign={smDown ? "center" : "left"} variant="h4">
               {title}
             </Typography>
           </Grid>
           {subtitle && (
-            <Grid item xs={12} sm={12} lg={12} mt={1}>
+            <Grid size={{ xs: 12, sm: 12, lg: 12 }} mt={1}>
               <Typography
                 textAlign={smDown ? "center" : "left"}
                 variant="body1"
@@ -78,7 +74,7 @@ const Breadcrumb = ({ title, subtitle, note }: BreadCrumbType) => {
             </Grid>
           )}
           {note && (
-            <Grid item xs={12} sm={12} lg={12} mt={1}>
+            <Grid size={{ xs: 12, sm: 12, lg: 12 }} mt={1}>
               <Typography
                 textAlign={smDown ? "center" : "left"}
                 variant="body2"
@@ -91,10 +87,7 @@ const Breadcrumb = ({ title, subtitle, note }: BreadCrumbType) => {
       </Grid>
       {!smDown && (
         <Grid
-          item
-          xs={6}
-          sm={6}
-          lg={4}
+          size={{ xs: 6, sm: 6, lg: 4 }}
           display="flex"
           alignItems="center"
           justifyContent="flex-end"

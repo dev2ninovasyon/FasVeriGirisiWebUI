@@ -996,9 +996,7 @@ const AmortismanVeriYukleme: React.FC<Props> = ({
       />
       <Grid container marginTop={2}>
         <Grid
-          item
-          xs={12}
-          lg={12}
+          size={{ xs: 12, lg: 12 }}
           sx={{
             display: "flex",
             justifyContent: "flex-end",

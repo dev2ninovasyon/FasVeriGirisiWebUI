@@ -835,7 +835,7 @@ const CekSenetReeskontVeriYukleme: React.FC<Props> = ({
     <>
       <WarnBox warn={uyari} />
       <Grid container>
-        <Grid item xs={12} lg={12}>
+        <Grid size={{ xs: 12, lg: 12 }}>
           <HotTable
             style={{
               height: "100%",
@@ -882,9 +882,7 @@ const CekSenetReeskontVeriYukleme: React.FC<Props> = ({
           />
           <Grid container marginTop={2}>
             <Grid
-              item
-              xs={12}
-              lg={12}
+              size={{ xs: 12, lg: 12 }}
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
